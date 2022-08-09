@@ -1,0 +1,5 @@
+# 忽略 APIKeys.swift 檔案
+APIKeys.swift
+
+# 忽略 xcuserdata 檔案
+Stocks.xcodeproj/xcuserdata
