@@ -26,6 +26,7 @@
 		D996BBDC289FC23E003FDFC4 /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = D996BBDB289FC23E003FDFC4 /* APIKeys.swift */; };
 		D996BBDF28A019E7003FDFC4 /* SearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D996BBDE28A019E7003FDFC4 /* SearchResponse.swift */; };
 		D996BBE528A18A46003FDFC4 /* StockDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D996BBE428A18A46003FDFC4 /* StockDetailsViewController.swift */; };
+		D9EB483D28A3FFA10096637F /* PanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9EB483C28A3FFA10096637F /* PanelViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		D996BBDB289FC23E003FDFC4 /* APIKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
 		D996BBDE28A019E7003FDFC4 /* SearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResponse.swift; sourceTree = "<group>"; };
 		D996BBE428A18A46003FDFC4 /* StockDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDetailsViewController.swift; sourceTree = "<group>"; };
+		D9EB483C28A3FFA10096637F /* PanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 		D996BB91289ECA4A003FDFC4 /* Stocks */ = {
 			isa = PBXGroup;
 			children = (
+				D9EB483A28A3FF750096637F /* Panel */,
 				D996BBE228A18A1A003FDFC4 /* StockDetails */,
 				D996BBD1289FB0BE003FDFC4 /* Extension */,
 				D996BBCD289FA9DA003FDFC4 /* SearchResults */,
@@ -233,6 +236,22 @@
 			isa = PBXGroup;
 			children = (
 				D996BBE428A18A46003FDFC4 /* StockDetailsViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		D9EB483A28A3FF750096637F /* Panel */ = {
+			isa = PBXGroup;
+			children = (
+				D9EB483B28A3FF890096637F /* ViewController */,
+			);
+			path = Panel;
+			sourceTree = "<group>";
+		};
+		D9EB483B28A3FF890096637F /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D9EB483C28A3FFA10096637F /* PanelViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -381,6 +400,7 @@
 				D996BBD0289FAA14003FDFC4 /* SearchResultsViewController.swift in Sources */,
 				D996BBDA289FB5FF003FDFC4 /* SearchResultCell.swift in Sources */,
 				D996BBC5289F7F25003FDFC4 /* APICaller.swift in Sources */,
+				D9EB483D28A3FFA10096637F /* PanelViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

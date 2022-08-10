@@ -16,12 +16,22 @@ class WatchListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         setUpSearchController()
         setUpTitleView()
+        setUpChild()
     }
     
     // MARK: - Private
+    
+    private func setUpChild() {
+        let vc = PanelViewController()
+        
+        view.addSubview(vc.view)
+        vc.view.frame = CGRect(x: 0, y: view.height/2, width: view.width, height: view.height/2)
+        #warning("沒用過")
+        vc.didMove(toParent: self)
+    }
     
     private func setUpTitleView() {
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: view.width, height: navigationController?.navigationBar.height ?? 100))
