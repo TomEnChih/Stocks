@@ -27,6 +27,8 @@ class NewsViewController: UIViewController {
     
     private let type: Type
     
+    var stories: [String] = ["123"]
+    
     let tableView: UITableView = {
         let tv = UITableView()
         tv.backgroundColor = .clear
