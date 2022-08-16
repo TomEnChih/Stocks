@@ -1,5 +1,5 @@
 # 忽略 APIKeys.swift 檔案
 APIKeys.swift
 
-# 忽略 xcuserdata 檔案
-Stocks.xcodeproj/xcuserdata
+# 忽略 xcbkptlist 檔案
+Breakpoints_v2.xcbkptlist
