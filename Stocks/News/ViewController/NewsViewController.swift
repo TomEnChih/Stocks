@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class NewsViewController: UIViewController {
 
@@ -27,11 +28,12 @@ class NewsViewController: UIViewController {
     
     private let type: Type
     
-    var stories: [String] = ["123"]
+    var stories = [NewsStory]()
     
     let tableView: UITableView = {
         let tv = UITableView()
         tv.backgroundColor = .clear
+        tv.register(cellType: NewsStoryCell.self)
         tv.register(headerFooterViewType: NewsHeaderView.self)
         return tv
     }()
@@ -67,9 +69,23 @@ class NewsViewController: UIViewController {
     }
     
     private func fetchNews() {
-        
+        APICaller.shared.news(for: type) { [weak self] result in
+            switch result {
+            case .success(let stories):
+                DispatchQueue.main.async {
+                    self?.stories = stories
+                    self?.tableView.reloadData()
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
     
+    private func open(url: URL) {
+        let vc = SFSafariViewController(url: url)
+        present(vc, animated: true, completion: nil)
+    }
     
 }
 
@@ -78,11 +94,13 @@ class NewsViewController: UIViewController {
 extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        0
+        stories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        let cell = tableView.dequeueReusableCell(for: indexPath, cellType: NewsStoryCell.self)
+        cell.configure(with: .init(model: stories[indexPath.row]))
+        return cell
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -94,12 +112,27 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        140
+        NewsStoryCell.preferredHeight
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        70
+        NewsHeaderView.preferredHeight
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let story = stories[indexPath.row]
+        guard let url = URL(string: story.url) else {
+            return
+        }
+        open(url: url)
+    }
     
+    private func presentFailedToOpenAlert() {
+        let alert = UIAlertController(title: "Unable to open",
+                                      message: "We were unable to open the article",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
 }

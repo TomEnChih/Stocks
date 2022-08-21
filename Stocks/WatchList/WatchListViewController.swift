@@ -28,7 +28,7 @@ class WatchListViewController: UIViewController {
     // MARK: - Private
     
     private func setUpFloatingPanel() {
-        let vc = NewsViewController(type: .topStories)
+        let vc = NewsViewController(type: .cpmpany(symbol: "SNAP"))
         let panel = FloatingPanelController()
         panel.surfaceView.backgroundColor = .secondarySystemBackground
         panel.set(contentViewController: vc)
@@ -123,7 +123,7 @@ extension WatchListViewController: SearchResultDelegate {
 extension WatchListViewController: FloatingPanelControllerDelegate {
      
     func floatingPanelDidChangeState(_ fpc: FloatingPanelController) {
-        navigationItem.titleView?.isHidden = fpc.state == .full
+        navigationItem.titleView?.isHidden = (fpc.state == .full)
     }
     
 }

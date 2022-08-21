@@ -43,8 +43,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func debug() {
-        APICaller.shared.news(for: .topStories) { result in
-            print(result)
+        APICaller.shared.news(for: .cpmpany(symbol: "MCSF")) { result in
+            switch result {
+            case .success(let response):
+                print(response.count)
+                
+            case .failure(let error):
+                print(error)
+            }
         }
     }
 

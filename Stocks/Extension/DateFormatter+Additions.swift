@@ -9,9 +9,11 @@ import Foundation
 
 extension DateFormatter {
     
-    static let newsDateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "YYYY-MM-dd"
-        return formatter
-    }()
+    static let newsDateFormatter = DateFormatter {
+        $0.dateFormat = "YYYY-MM-dd"
+    }
+    
+    static let prettyDateFormatter = DateFormatter {
+        $0.dateStyle = .medium
+    }
 }
