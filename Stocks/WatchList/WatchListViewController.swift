@@ -14,6 +14,17 @@ class WatchListViewController: UIViewController {
     
     private var panel: FloatingPanelController?
     
+    /// Model
+    private var watchlistMap: [String: [CandleStick]] = [:]
+    
+    /// ViewModels
+    private var viewModels: [String] = []
+    
+    private let tableView = UITableView {
+        $0.backgroundColor = .orange
+//        $0.register(cellType: UITableViewCell.self)
+    }
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -21,14 +32,51 @@ class WatchListViewController: UIViewController {
 
         view.backgroundColor = .systemBackground
         setUpSearchController()
+        setUpTableView()
+        setUpWatchlistData()
         setUpTitleView()
         setUpFloatingPanel()
     }
     
     // MARK: - Private
     
+    private func setUpWatchlistData() {
+        let symbols = PersistenceManager.shared.watchlist
+        
+        #warning("很不懂")
+        let group = DispatchGroup()
+        
+        for symbol in symbols {
+            group.enter()
+            
+            APICaller.shared.marketData(for: symbol) { [weak self] result in
+                defer {
+                    group.leave()
+                }
+                
+                switch result {
+                case .success(let data):
+                    let candleSticks = data.candleStick
+                    self?.watchlistMap[symbol] = candleSticks
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+        
+        group.notify(queue: .main) {  [weak self] in
+            self?.tableView.reloadData()
+        }
+    }
+    
+    private func setUpTableView() {
+        view.addSubviews(tableView)
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+    
     private func setUpFloatingPanel() {
-        let vc = NewsViewController(type: .cpmpany(symbol: "SNAP"))
+        let vc = NewsViewController(type: .topStories)
         let panel = FloatingPanelController()
         panel.surfaceView.backgroundColor = .secondarySystemBackground
         panel.set(contentViewController: vc)
@@ -120,10 +168,32 @@ extension WatchListViewController: SearchResultDelegate {
 
 
 // MARK: - FloatingPanelControllerDelegate
+
 extension WatchListViewController: FloatingPanelControllerDelegate {
      
     func floatingPanelDidChangeState(_ fpc: FloatingPanelController) {
         navigationItem.titleView?.isHidden = (fpc.state == .full)
+    }
+    
+}
+
+
+// MARK: - UITableViewDataSource, UITableViewDelegate
+
+extension WatchListViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        watchlistMap.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(for: indexPath, cellType: ui)
+        return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        //Open detail from selection
     }
     
 }
