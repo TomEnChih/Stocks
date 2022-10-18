@@ -7,6 +7,7 @@
 
 import Foundation
 
+// 股票資訊
 // ["AAPL", "MSFT", "SNAP"]
 // [AAPL: Apple Inc.]
 final class PersistenceManager {
@@ -25,6 +26,7 @@ final class PersistenceManager {
     // MARK: - Public
     
     public var watchlist: [String] {
+        print(hasOnboarded)
         if !hasOnboarded {
             userDefaults.set(true, forKey: Constants.onboardedKey)
             setUpDefaults()

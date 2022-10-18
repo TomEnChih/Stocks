@@ -12,13 +12,13 @@ class NewsViewController: UIViewController {
 
     enum `Type` {
         case topStories
-        case cpmpany(symbol: String)
+        case company(symbol: String)
         
         var title: String {
             switch self {
             case .topStories:
                 return "Top Stories"
-            case .cpmpany(let symbol):
+            case .company(let symbol):
                 return symbol.uppercased()
             }
         }

@@ -30,7 +30,6 @@ class SearchResultsViewController: UIViewController {
         setUpTable()
     }
     
-    #warning("之後了解")
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds

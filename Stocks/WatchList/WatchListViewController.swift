@@ -10,7 +10,7 @@ import FloatingPanel
 
 class WatchListViewController: UIViewController {
     
-    private var searchTimer: Timer?
+    private var searchTask: DispatchWorkItem?
     
     private var panel: FloatingPanelController?
     
@@ -18,7 +18,7 @@ class WatchListViewController: UIViewController {
     private var watchlistMap: [String: [CandleStick]] = [:]
     
     /// ViewModels
-    private var viewModels: [String] = []
+    private var viewModels: [WatchListTableViewCell.ViewModel] = []
     
     private let tableView = UITableView {
         $0.backgroundColor = .orange
@@ -43,7 +43,7 @@ class WatchListViewController: UIViewController {
     private func setUpWatchlistData() {
         let symbols = PersistenceManager.shared.watchlist
         
-        #warning("很不懂")
+        #warning("第一次使用")
         let group = DispatchGroup()
         
         for symbol in symbols {
@@ -56,7 +56,7 @@ class WatchListViewController: UIViewController {
                 
                 switch result {
                 case .success(let data):
-                    let candleSticks = data.candleStick
+                    let candleSticks = data.candleSticks
                     self?.watchlistMap[symbol] = candleSticks
                 case .failure(let error):
                     print(error)
@@ -65,8 +65,42 @@ class WatchListViewController: UIViewController {
         }
         
         group.notify(queue: .main) {  [weak self] in
+            self?.createViewModels()
             self?.tableView.reloadData()
         }
+    }
+    
+    private func createViewModels() {
+        var viewModels = [WatchListTableViewCell.ViewModel]()
+        for (symbol, candleSticks) in watchlistMap {
+            let changePercentage = getChangePercentage(symbol: symbol, data: candleSticks)
+            viewModels.append(.init(symbol: symbol,
+                                    companyName: UserDefaults.standard.string(forKey: symbol) ?? "Company",
+                                    price: getlatestClosingPrice(from: candleSticks),
+                                    changeColor: changePercentage < 0 ? .systemRed: .systemGreen, changePercentage: "\(changePercentage)"))
+        }
+        
+        self.viewModels = viewModels
+    }
+    
+    private func getChangePercentage(symbol: String ,data: [CandleStick]) -> Double {
+        let priorDate = Date().addingTimeInterval(-((3600 * 24) * 2))
+        guard let latestClose = data.first?.close,
+              let priorClose = data.first(where: {
+                  Calendar.current.isDate($0.date, inSameDayAs: priorDate)
+              })?.close else {
+                  return 0
+              }
+        
+        print("\(symbol): Current: (\(data[0].date): \(latestClose) | Prior\(priorDate): \(priorClose)")
+        
+        return priorClose/latestClose
+    }
+    
+    private func getlatestClosingPrice(from data: [CandleStick]) -> String {
+        guard let closingPrice = data.first?.close else { return "" }
+        
+        return "\(closingPrice)"
     }
     
     private func setUpTableView() {
@@ -120,14 +154,11 @@ extension WatchListViewController: UISearchResultsUpdating {
                   return
               }
         
-        // Reset timer
-        searchTimer?.invalidate()
+        // Cancel task
+        self.searchTask?.cancel()
         
-        #warning("想下可以怎樣再優化")
-        // Kick off new timer
-        // Optimize to reduce number of searches for when user stops typing
-        searchTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false, block: { _ in
-            
+        // Task encapsulates work
+        let task = DispatchWorkItem {
             // Call API to search
             APICaller.shared.search(query: query) { result in
                 
@@ -145,7 +176,11 @@ extension WatchListViewController: UISearchResultsUpdating {
                     print(error)
                 }
             }
-        })
+        }
+        
+        searchTask = task
+        #warning("第一次使用")
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3, execute: task)
     }
 }
 

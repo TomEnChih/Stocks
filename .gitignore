@@ -3,3 +3,9 @@ APIKeys.swift
 
 # 忽略 xcbkptlist 檔案
 Breakpoints_v2.xcbkptlist
+
+# 忽略
+xcschememanagement.plist
+
+## User settings
+xcuserdata/

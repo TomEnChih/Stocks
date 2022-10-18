@@ -43,14 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func debug() {
-        APICaller.shared.news(for: .cpmpany(symbol: "MCSF")) { result in
-            switch result {
-            case .success(let response):
-                print(response.count)
-                
-            case .failure(let error):
-                print(error)
-            }
+        APICaller.shared.marketData(for: "AAPL", numberOfDays: 1) { result in
+            print(result)
         }
     }
 

@@ -62,7 +62,6 @@ class NewsHeaderView: UITableViewHeaderFooterView, Reusable {
         super.layoutSubviews()
         label.frame = CGRect(x: 14, y: 0, width: contentView.width-28, height: contentView.height)
         
-        #warning("忘記做什麼的")
         button.sizeToFit()
         button.frame = CGRect(x: contentView.width - button.width - 16,
                               y: (contentView.height - button.height)/2,

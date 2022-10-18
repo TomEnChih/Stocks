@@ -13,7 +13,7 @@ final class APICaller {
     
     private struct Constants {
         static let baseUrl = "https://finnhub.io/api/v1/"
-        static let day: TimeInterval = 3600 * 24
+//        static let day: TimeInterval = 3600 * 24
     }
     
     private init() { }
@@ -26,7 +26,7 @@ final class APICaller {
     public func search(query: String,
                        completion: @escaping (Result<SearchResponse, Error> )->Void) {
         
-        #warning("不太懂")
+        // 特殊字符處理
         guard let safeQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
         guard let url = url(for: .search, queryParams: ["q":safeQuery]) else { return }
         
@@ -41,9 +41,9 @@ final class APICaller {
             let url = url(for: .topStories, queryParams: ["category":"general"])
             request(url: url, expecting: [NewsStory].self, completion: compeletion)
             
-        case .cpmpany(let symbol):
+        case .company(let symbol):
             let today = Date()
-            let oneMonthBack = today.addingTimeInterval(-(Constants.day * 7))
+            let oneMonthBack = today.prior(unit: .month(1))
             let url = url(for: .companyNews,
                              queryParams: ["symbol":symbol,
                                            "from":DateFormatter.newsDateFormatter.string(from: oneMonthBack),
@@ -57,13 +57,13 @@ final class APICaller {
                            numberOfDays: TimeInterval = 7,
                            completion: @escaping (Result<MarketDataResponse, Error>) -> Void) {
         
-        let today = Date().addingTimeInterval(-(Constants.day))
-        let prior = today.addingTimeInterval(-(Constants.day * numberOfDays))
+        let today = Date().prior(unit: .day(1))
+        let prior = today.prior(unit: .day(numberOfDays))
         let url = url(for: .marketData,
                          queryParams: ["symbol":symbol,
                                        "resolution": "1",
-                                       "from": "\(prior.timeIntervalSince1970)",
-                                       "to": "\(today.timeIntervalSince1970)"])
+                                       "from": "\(prior.intSince1970)",
+                                       "to": "\(today.intSince1970)"])
         request(url: url, expecting: MarketDataResponse.self, completion: completion)
     }
     
@@ -81,6 +81,7 @@ final class APICaller {
         case noDataReturned
     }
     
+    #warning("可以嘗試改成 URLComponents")
     private func url(for endpoint: Endpoint,
                      queryParams: [String:String] = [:]) -> URL? {
         
