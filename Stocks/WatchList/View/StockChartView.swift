@@ -8,7 +8,12 @@
 import UIKit
 
 class StockChartView: UIView {
-
+    
+    struct ViewModel {
+        let data: [Double]
+        let showLegend: Bool
+        let showAxis: Bool
+    }
     
     // MARK: - Properties
     
@@ -33,4 +38,12 @@ class StockChartView: UIView {
     }
     
     // MARK: - Methods
+    
+    func reset() {
+        
+    }
+    
+    func configure(with viewModel: ViewModel) {
+        
+    }
 }

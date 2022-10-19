@@ -1,16 +1,20 @@
 PODS:
   - FloatingPanel (2.5.5)
+  - SnapKit (5.6.0)
 
 DEPENDENCIES:
   - FloatingPanel
+  - SnapKit (~> 5.6.0)
 
 SPEC REPOS:
   trunk:
     - FloatingPanel
+    - SnapKit
 
 SPEC CHECKSUMS:
   FloatingPanel: a27e7827e0f710fa6236fe2596dd1b5484cb4fc1
+  SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
 
-PODFILE CHECKSUM: f60b9955c2d980b349159c1d123d3c54dc584a0f
+PODFILE CHECKSUM: f2e1c2fed024cb2d1ded4c8a292e2d068d3ca6c1
 
 COCOAPODS: 1.11.3
