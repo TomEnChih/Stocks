@@ -33,7 +33,7 @@ final class APICaller {
         request(url: url, expecting: SearchResponse.self, completion: completion)
     }
     
-    public func news(for type: NewsViewController.`Type`,
+    public func news(for type: NewsStoryViewModel.`Type`,
                      compeletion: @escaping (Result<[NewsStory], Error>)->Void) {
         
         switch type {

@@ -150,7 +150,7 @@ class WatchListViewController: UIViewController {
         panel.addPanel(toParent: self)
         panel.delegate = self
         #warning("不太確定")
-        panel.track(scrollView: vc.tableView)
+        panel.track(scrollView: vc.newsView.tableView)
     }
     
     private func setUpTitleView() {

@@ -9,37 +9,17 @@ import UIKit
 import SafariServices
 
 class NewsViewController: UIViewController {
-
-    enum `Type` {
-        case topStories
-        case company(symbol: String)
-        
-        var title: String {
-            switch self {
-            case .topStories:
-                return "Top Stories"
-            case .company(let symbol):
-                return symbol.uppercased()
-            }
-        }
-    }
     
-    // MARK: Properties
+    // MARK: - Properties
     
-    private let type: Type
+    let newsView = NewsView()
     
-    var stories = [NewsStory]()
+    private let viewModel: NewsStoryViewModel
     
-    let tableView: UITableView = {
-        let tv = UITableView()
-        tv.backgroundColor = .clear
-        tv.register(cellType: NewsStoryCell.self)
-        tv.register(headerFooterViewType: NewsHeaderView.self)
-        return tv
-    }()
+    // MARK: - Init
     
-    init(type: Type) {
-        self.type = type
+    init(type: NewsStoryViewModel.`Type`) {
+        self.viewModel = NewsStoryViewModel(type: type)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -51,34 +31,21 @@ class NewsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpTable()
-        fetchNews()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        tableView.frame = view.bounds
+        setUpView()
+        setUpBinding()
     }
     
     // MARK: - Private
     
-    private func setUpTable() {
-        view.addSubview(tableView)
-        tableView.dataSource = self
-        tableView.delegate = self
+    private func setUpView() {
+        view = newsView
+        newsView.tableView.dataSource = self
+        newsView.tableView.delegate = self
     }
     
-    private func fetchNews() {
-        APICaller.shared.news(for: type) { [weak self] result in
-            switch result {
-            case .success(let stories):
-                DispatchQueue.main.async {
-                    self?.stories = stories
-                    self?.tableView.reloadData()
-                }
-            case .failure(let error):
-                print(error)
-            }
+    private func setUpBinding() {
+        viewModel.reloadDataClosure = { [weak self] in
+            self?.newsView.tableView.reloadData()
         }
     }
     
@@ -89,17 +56,18 @@ class NewsViewController: UIViewController {
     
 }
 
-
 // MARK: - UITableViewDataSource, UITableViewDelegate
+
 extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        stories.count
+        viewModel.numberOfCells
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(for: indexPath, cellType: NewsStoryCell.self)
-        cell.configure(with: .init(model: stories[indexPath.row]))
+        let story = viewModel.getCellViewModel(at: indexPath)
+        cell.configure(with: story)
         return cell
     }
     
@@ -107,7 +75,7 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
         guard let header = tableView.dequeueReusableHeaderFooterView(NewsHeaderView.self) else {
             return nil
         }
-        header.configure(with: .init(title: self.type.title, shouldShowAddButton: true))
+        header.configure(with: .init(title: viewModel.type.title, shouldShowAddButton: false))
         return header
     }
     
@@ -121,10 +89,8 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let story = stories[indexPath.row]
-        guard let url = URL(string: story.url) else {
-            return
-        }
+        let story = viewModel.getCellViewModel(at: indexPath)
+        guard let url = URL(string: story.url) else { return }
         open(url: url)
     }
     

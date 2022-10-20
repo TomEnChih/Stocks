@@ -9,7 +9,7 @@ import Foundation
 
 // 股票資訊
 // ["AAPL", "MSFT", "SNAP"]
-// [AAPL: Apple Inc.]
+// [AAPL: Apple Inc.]  --> [symbol: name]
 final class PersistenceManager {
     
     static let shared = PersistenceManager()
@@ -25,8 +25,8 @@ final class PersistenceManager {
     
     // MARK: - Public
     
+    // watchlist 首頁顯示資訊
     public var watchlist: [String] {
-        print(hasOnboarded)
         if !hasOnboarded {
             userDefaults.set(true, forKey: Constants.onboardedKey)
             setUpDefaults()
@@ -59,6 +59,7 @@ final class PersistenceManager {
         return userDefaults.bool(forKey: Constants.onboardedKey)
     }
     
+    // 預設公司
     private func setUpDefaults() {
         let map: [String:String] = [
             "AAPL": "Apple Inc",

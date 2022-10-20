@@ -9,20 +9,6 @@ import UIKit
 
 class NewsStoryCell: UITableViewCell, Reusable {
     
-    struct ViewModel {
-        let source: String
-        let headline: String
-        let dateString: String
-        let imageUrl: String
-        
-        init(model: NewsStory) {
-            self.source = model.source
-            self.headline = model.headline
-            self.dateString = .string(from: model.datetime)
-            self.imageUrl = model.image
-        }
-    }
-    
     // MARK: - Properties
     
     static let preferredHeight: CGFloat = 140
@@ -57,48 +43,46 @@ class NewsStoryCell: UITableViewCell, Reusable {
     
     // MARK: - Autolayout
     
-    private func setConstraints() {
+    private func setAutoLayout() {
         contentView.addSubviews(sourceLabel, headlineLabel, dateLabel, storyImageView)
+        
+        storyImageView.snp.makeConstraints { make in
+            make.centerY.equalTo(contentView)
+            make.right.equalTo(contentView).offset(-10)
+            make.height.equalTo(contentView).multipliedBy(1/1.4)
+            make.width.equalTo(contentView.snp.height).multipliedBy(1/1.4 * (700/538))
+        }
+        
+        sourceLabel.snp.makeConstraints { make in
+            make.top.equalTo(contentView).offset(4)
+            make.left.equalTo(contentView).offset(20)
+        }
+        
+        dateLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(contentView).offset(-10)
+            make.left.equalTo(sourceLabel)
+            make.height.equalTo(14)
+        }
+        
+        headlineLabel.snp.makeConstraints { make in
+            make.top.equalTo(sourceLabel.snp.bottom).offset(5)
+            make.bottom.lessThanOrEqualTo(dateLabel.snp.top).offset(-5)
+            make.left.equalTo(sourceLabel)
+            make.right.equalTo(storyImageView.snp.left).offset(-5)
+        }
     }
 
     // MARK: - Init
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setConstraints()
-        contentView.backgroundColor = .secondarySystemBackground
-        backgroundColor = .secondarySystemBackground
+        setAutoLayout()
+        contentView.backgroundColor = .clear
+        backgroundColor = .clear
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        let imageSize: CGFloat = contentView.height/1.4
-        storyImageView.frame = CGRect(x: contentView.width-imageSize-10,
-                                      y: (contentView.height - imageSize)/2,
-                                      width: imageSize,
-                                      height: imageSize)
-        
-        let availableWidth: CGFloat = contentView.width-separatorInset.left-imageSize-15
-        dateLabel.frame = CGRect(x: separatorInset.left,
-                                 y: contentView.height-40,
-                                 width: availableWidth,
-                                 height: 40)
-        
-        sourceLabel.sizeToFit()
-        sourceLabel.frame = CGRect(x: separatorInset.left,
-                                   y: 4,
-                                   width: availableWidth,
-                                   height: sourceLabel.height)
-        
-        headlineLabel.frame = CGRect(x: separatorInset.left,
-                                 y: sourceLabel.bottom+5,
-                                 width: availableWidth,
-                                 height: contentView.height-sourceLabel.bottom-dateLabel.height-10)
     }
     
     override func prepareForReuse() {
@@ -111,7 +95,7 @@ class NewsStoryCell: UITableViewCell, Reusable {
     
     // MARK: - Methods
     
-    func configure(with viewModel: ViewModel) {
+    func configure(with viewModel: NewsStoryViewModel.CellViewModel) {
         sourceLabel.text = viewModel.source
         headlineLabel.text = viewModel.headline
         dateLabel.text = viewModel.dateString
