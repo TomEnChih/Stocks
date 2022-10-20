@@ -28,6 +28,8 @@ class WatchListViewController: UIViewController {
         $0.register(cellType: WatchListTableViewCell.self)
     }
     
+    private var observer: NSObjectProtocol?
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -36,9 +38,10 @@ class WatchListViewController: UIViewController {
         view.backgroundColor = .systemBackground
         setUpSearchController()
         setUpTableView()
-        setUpWatchlistData()
+        fatchWatchlistData()
         setUpTitleView()
         setUpFloatingPanel()
+        setUpObserver()
     }
     
     override func viewDidLayoutSubviews() {
@@ -48,13 +51,22 @@ class WatchListViewController: UIViewController {
     
     // MARK: - Private
     
-    private func setUpWatchlistData() {
+    private func setUpObserver() {
+        observer = NotificationCenter.default.addObserver(forName: .didAddToWatchList,
+                                                          object: nil,
+                                                          queue: .main, using: { [weak self] _ in
+            self?.viewModels.removeAll()
+            self?.fatchWatchlistData()
+        })
+    }
+    
+    private func fatchWatchlistData() {
         let symbols = PersistenceManager.shared.watchlist
         
         #warning("第一次使用")
         let group = DispatchGroup()
         
-        for symbol in symbols {
+        for symbol in symbols where watchlistMap[symbol] == nil {
             group.enter()
             
             APICaller.shared.marketData(for: symbol) { [weak self] result in
@@ -215,7 +227,8 @@ extension WatchListViewController: SearchResultDelegate {
         print("Did select: \(searchResult.displaySymbol)")
         navigationItem.searchController?.searchBar.resignFirstResponder()
         
-        let vc = StockDetailsViewController()
+        let vc = StockDetailsViewController(symbol: searchResult.displaySymbol,
+                                            companyName: searchResult.description)
         let navVC = UINavigationController(rootViewController: vc)
         vc.title = searchResult.description
         present(navVC, animated: true, completion: nil)
@@ -239,7 +252,7 @@ extension WatchListViewController: FloatingPanelControllerDelegate {
 extension WatchListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        watchlistMap.count
+        viewModels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -252,10 +265,42 @@ extension WatchListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         //Open detail from selection
+        let viewModel = viewModels[indexPath.row]
+        let vc = StockDetailsViewController(symbol: viewModel.symbol,
+                                            companyName: viewModel.companyName,
+                                            candleStickData: watchlistMap[viewModel.symbol] ?? []
+        )
+        let navVC = UINavigationController(rootViewController: vc)
+        present(navVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return WatchListTableViewCell.preferredHeight
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        guard editingStyle == .delete else { return }
+        // 不用调用cellForRow，仅仅需要调用heightForRow，这样效率最高。動畫效果更加同步、滑順
+        tableView.beginUpdates()
+        
+        // Update persistence
+        PersistenceManager.shared.removeFromWatchlist(symbol: viewModels[indexPath.row].symbol)
+        
+        // Update viewModels
+        viewModels.remove(at: indexPath.row)
+        
+        // Deleta Row
+        tableView.deleteRows(at: [indexPath], with: .automatic)
+        
+        tableView.endUpdates()
     }
 }
 

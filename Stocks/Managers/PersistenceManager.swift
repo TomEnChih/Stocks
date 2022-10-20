@@ -34,12 +34,23 @@ final class PersistenceManager {
         return userDefaults.stringArray(forKey: Constants.watchlistKey) ?? []
     }
     
-    public func addToWatchlist() {
-        
+    public func addToWatchlist(symbol: String, companyName: String) {
+         var current = watchlist
+        current.append(symbol)
+        userDefaults.set(current, forKey: Constants.watchlistKey)
+        userDefaults.set(companyName, forKey: symbol)
     }
     
-    public func removeFromWatchlist() {
+    public func removeFromWatchlist(symbol: String) {
+        var newList = [String]()
         
+        userDefaults.set(nil, forKey: symbol)
+        
+        for item in watchlist where item != symbol {
+            newList.append(item)
+        }
+        
+        userDefaults.set(newList, forKey: Constants.watchlistKey)
     }
     
     // MARK: - Private
