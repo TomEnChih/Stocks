@@ -9,6 +9,11 @@ import Foundation
 
 class NewsStoryViewModel {
     
+    struct HeaderViewModel {
+        let title: String
+        let shouldShowAddButton: Bool
+    }
+    
     struct CellViewModel {
         let source: String
         let headline: String

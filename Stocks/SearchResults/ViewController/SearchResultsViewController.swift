@@ -13,6 +13,8 @@ protocol SearchResultDelegate: AnyObject {
 
 class SearchResultsViewController: UIViewController {
     
+    // MARK: - Properties
+    
     weak var delegate: SearchResultDelegate?
     
     private var results: [SearchResult] = []
@@ -23,30 +25,38 @@ class SearchResultsViewController: UIViewController {
         tv.isHidden = true
         return tv
     }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .systemBlue
-        setUpTable()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        tableView.frame = view.bounds
-    }
-    
-    private func setUpTable() {
-        view.addSubview(tableView)
-        tableView.dataSource = self
-        tableView.delegate = self
-    }
+        
+    // MARK: - Public
     
     public func update(with results: [SearchResult]) {
         self.results = results
         tableView.isHidden = results.isEmpty
         tableView.reloadData()
     }
-
+    
+    // MARK: - Init
+    
+    // MARK: - LifeCycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setUpView()
+    }
+    
+    // MARK: - Private
+    
+    private func setUpView() {
+        view.backgroundColor = .rgb(0, 0, 0, alpha: 0.2)
+        view.addSubview(tableView)
+        
+        tableView.snp.makeConstraints { make in
+            make.edges.equalTo(view)
+        }
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+    }
+    
 }
 
 
@@ -61,8 +71,7 @@ extension SearchResultsViewController: UITableViewDataSource, UITableViewDelegat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(for: indexPath) as SearchResultCell
         let model = results[indexPath.row]
-        cell.textLabel?.text = model.displaySymbol
-        cell.detailTextLabel?.text = model.description
+        cell.configure(with: model)
         return cell
     }
     

@@ -15,8 +15,6 @@ class WatchListViewController: UIViewController {
     
     private var panel: FloatingPanelController?
     
-    static var maxChangeWidth: CGFloat = 0
-    
     /// Model
     private var watchlistMap: [String: [CandleStick]] = [:]
     
@@ -154,12 +152,7 @@ class WatchListViewController: UIViewController {
     }
     
     private func setUpTitleView() {
-        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: view.width, height: navigationController?.navigationBar.height ?? 100))
-        
-        let label = UILabel(frame: CGRect(x: 10, y: 0, width: titleView.width-20, height: titleView.height))
-        label.text = "Stocks"
-        label.font = .systemFont(ofSize: 32, weight: .medium)
-        titleView.addSubview(label)
+        let titleView = WatchListTitleView(frame: CGRect(x: 0, y: 0, width: view.width, height: navigationController?.navigationBar.height ?? 100))
         
         navigationItem.titleView = titleView
     }
@@ -183,9 +176,8 @@ extension WatchListViewController: UISearchResultsUpdating {
         ///移除字串前後空白後不能為空
         guard let query = searchController.searchBar.text,
               let resultsVC = searchController.searchResultsController as? SearchResultsViewController,
-              !query.trimmingCharacters(in: .whitespaces).isEmpty else {
-                  return
-              }
+              !query.trimmingCharacters(in: .whitespaces).isEmpty
+        else { return }
         
         // Cancel task
         self.searchTask?.cancel()
@@ -257,7 +249,6 @@ extension WatchListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(for: indexPath, cellType: WatchListTableViewCell.self)
-        cell.delegate = self
         cell.configure(with: viewModels[indexPath.row])
         return cell
     }
@@ -301,16 +292,5 @@ extension WatchListViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.deleteRows(at: [indexPath], with: .automatic)
         
         tableView.endUpdates()
-    }
-}
-
-
-// MARK: - WatchListTableViewCellDelegate
-
-extension WatchListViewController: WatchListTableViewCellDelegate {
-    
-    func didUpdateMaxWidth() {
-        // Optimize: Only refresh rows prior to the current row that changes the max width
-        tableView.reloadData()
     }
 }

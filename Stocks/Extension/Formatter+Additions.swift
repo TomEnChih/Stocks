@@ -29,7 +29,7 @@ extension NumberFormatter {
     
     static let numberFormatter = NumberFormatter {
         $0.locale = .current
-        $0.numberStyle = .decimal
+        $0.numberStyle = .decimal   // 無條件進位
         $0.maximumFractionDigits = 2
     }
 }

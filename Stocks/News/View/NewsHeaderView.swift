@@ -13,11 +13,6 @@ protocol NewsHeaderViewDelegate: AnyObject {
 
 class NewsHeaderView: UITableViewHeaderFooterView, Reusable {
     
-    struct ViewModel {
-        let title: String
-        let shouldShowAddButton: Bool
-    }
-    
     // MARK: - Properties
     
     static let preferredHeight: CGFloat = 70
@@ -74,7 +69,7 @@ class NewsHeaderView: UITableViewHeaderFooterView, Reusable {
     
     // MARK: - Public
     
-    public func configure(with viewModel: ViewModel) {
+    public func configure(with viewModel: NewsStoryViewModel.HeaderViewModel) {
         label.text = viewModel.title
         button.isHidden = !viewModel.shouldShowAddButton
     }
