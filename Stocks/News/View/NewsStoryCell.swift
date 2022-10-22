@@ -33,13 +33,7 @@ class NewsStoryCell: UITableViewCell, Reusable {
     }
     
     // Image
-    private let storyImageView = CustomImageView {
-        $0.backgroundColor = .tertiarySystemBackground
-        $0.clipsToBounds = true
-        $0.contentMode = .scaleAspectFill
-        $0.layer.cornerRadius = 6
-        $0.layer.masksToBounds = true
-    }
+    private let storyImageView = CustomImageView()
     
     // MARK: - Autolayout
     

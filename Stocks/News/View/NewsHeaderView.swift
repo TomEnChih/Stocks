@@ -25,7 +25,7 @@ class NewsHeaderView: UITableViewHeaderFooterView, Reusable {
         $0.font = .boldSystemFont(ofSize: 32)
     }
     
-    private lazy var button = UIButton {
+    lazy var button = UIButton {
         $0.setTitle("+ Watchlist", for: .normal)
         $0.setTitleColor(.white, for: .normal)
         $0.layer.cornerRadius = 8

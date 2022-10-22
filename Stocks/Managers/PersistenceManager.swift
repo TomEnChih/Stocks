@@ -34,11 +34,17 @@ final class PersistenceManager {
         return userDefaults.stringArray(forKey: Constants.watchlistKey) ?? []
     }
     
+    // watchlist 是否包含這個 smybol
+    public func watchlistContains(symbol: String) -> Bool {
+        return watchlist.contains(symbol)
+    }
+    
     public func addToWatchlist(symbol: String, companyName: String) {
          var current = watchlist
         current.append(symbol)
         userDefaults.set(current, forKey: Constants.watchlistKey)
         userDefaults.set(companyName, forKey: symbol)
+        NotificationCenter.default.post(name: .didAddToWatchList, object: nil)
     }
     
     public func removeFromWatchlist(symbol: String) {

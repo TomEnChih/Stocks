@@ -72,10 +72,8 @@ extension NewsViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let header = tableView.dequeueReusableHeaderFooterView(NewsHeaderView.self) else {
-            return nil
-        }
-        header.configure(with: .init(title: viewModel.type.title, shouldShowAddButton: false))
+        let header = tableView.dequeueReusableHeaderFooterView(NewsHeaderView.self)
+        header?.configure(with: .init(title: viewModel.type.title, shouldShowAddButton: false))
         return header
     }
     

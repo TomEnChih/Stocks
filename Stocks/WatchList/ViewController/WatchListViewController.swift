@@ -22,7 +22,7 @@ class WatchListViewController: UIViewController {
     private var viewModels: [WatchListTableViewCell.ViewModel] = []
     
     private let tableView = UITableView {
-        $0.backgroundColor = .orange
+        $0.backgroundColor = .systemBackground
         $0.register(cellType: WatchListTableViewCell.self)
     }
     

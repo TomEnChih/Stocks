@@ -133,7 +133,6 @@ class WatchListTableViewCell: UITableViewCell, Reusable {
         priceLabel.text = viewModel.price
         changeLabel.text = viewModel.changePercentage
         changeLabel.backgroundColor = viewModel.changeColor
-        // Configure chart
     }
     
 }
