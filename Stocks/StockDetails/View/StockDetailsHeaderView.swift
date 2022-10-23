@@ -41,7 +41,7 @@ class StockDetailsHeaderView: UIView {
         
         chartView.snp.makeConstraints { make in
             make.top.left.right.equalTo(self)
-            make.bottom.equalTo(collectionView)
+            make.bottom.equalTo(collectionView.snp.top)
         }
     }
     
@@ -64,6 +64,7 @@ class StockDetailsHeaderView: UIView {
     func configure(chartViewModel: StockChartView.ViewModel,
                    metricViewModels: [MetricCell.ViewModel]) {
         
+        chartView.configure(with: chartViewModel)
         self.metricViewModels = metricViewModels
         collectionView.reloadData()
     }

@@ -8,6 +8,7 @@ target 'Stocks' do
   # Pods for Stocks
   pod 'FloatingPanel'
   pod 'SnapKit', '~> 5.6.0'
+  pod 'Charts'
 
   target 'StocksTests' do
     inherit! :search_paths

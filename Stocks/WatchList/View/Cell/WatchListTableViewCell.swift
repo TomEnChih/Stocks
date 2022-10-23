@@ -53,7 +53,8 @@ class WatchListTableViewCell: UITableViewCell, Reusable {
     }
     
     private let miniChartView = StockChartView {
-        $0.backgroundColor = .systemPink
+        $0.backgroundColor = .clear
+        $0.isUserInteractionEnabled = false
         $0.clipsToBounds = true
     }
     
@@ -133,6 +134,7 @@ class WatchListTableViewCell: UITableViewCell, Reusable {
         priceLabel.text = viewModel.price
         changeLabel.text = viewModel.changePercentage
         changeLabel.backgroundColor = viewModel.changeColor
+        miniChartView.configure(with: viewModel.chartViewModel)
     }
     
 }
