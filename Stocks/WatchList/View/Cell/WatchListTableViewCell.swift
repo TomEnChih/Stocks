@@ -17,9 +17,16 @@ class WatchListTableViewCell: UITableViewCell, Reusable {
         let symbol: String
         let companyName: String
         let price: String               // formatted
-        let changeColor: UIColor        // red or green
-        let changePercentage: String    // formatted
+        let changePercentage: Double    // formatted
         let chartViewModel: StockChartView.ViewModel
+        
+        var changeColor: UIColor {
+            return changePercentage < 0 ? .systemGreen:.systemRed
+        }
+        
+        var changePercentageString: String {
+            return .percentage(from: changePercentage)
+        }
     }
     
     // MARK: - UIElements
@@ -132,7 +139,7 @@ class WatchListTableViewCell: UITableViewCell, Reusable {
         symbolLabel.text = viewModel.symbol
         nameLabel.text = viewModel.companyName
         priceLabel.text = viewModel.price
-        changeLabel.text = viewModel.changePercentage
+        changeLabel.text = viewModel.changePercentageString
         changeLabel.backgroundColor = viewModel.changeColor
         miniChartView.configure(with: viewModel.chartViewModel)
     }

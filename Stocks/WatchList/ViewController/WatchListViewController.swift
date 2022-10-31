@@ -11,20 +11,11 @@ import SnapKit
 
 class WatchListViewController: UIViewController {
     
-    private var searchTask: DispatchWorkItem?
-    
     private var panel: FloatingPanelController?
     
-    /// Model
-    private var watchlistMap: [String: [CandleStick]] = [:]
+    private var viewModel = WatchListViewModel()
     
-    /// ViewModels
-    private var viewModels: [WatchListTableViewCell.ViewModel] = []
-    
-    private let tableView = UITableView {
-        $0.backgroundColor = .systemBackground
-        $0.register(cellType: WatchListTableViewCell.self)
-    }
+    private let watchListView = WatchListView()
     
     private var observer: NSObjectProtocol?
     
@@ -32,19 +23,13 @@ class WatchListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = .systemBackground
         setUpSearchController()
-        setUpTableView()
-        fatchWatchlistData()
+        setUpView()
         setUpTitleView()
         setUpFloatingPanel()
         setUpObserver()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        tableView.frame = view.bounds
+        setUpBinding()
     }
     
     // MARK: - Private
@@ -53,92 +38,25 @@ class WatchListViewController: UIViewController {
         observer = NotificationCenter.default.addObserver(forName: .didAddToWatchList,
                                                           object: nil,
                                                           queue: .main, using: { [weak self] _ in
-            self?.viewModels.removeAll()
-            self?.fatchWatchlistData()
+            self?.viewModel.cellViewModels.value.removeAll()
+            self?.viewModel.fatchWatchlistData()
         })
     }
     
-    private func fatchWatchlistData() {
-        let symbols = PersistenceManager.shared.watchlist
+    private func setUpView() {
+        view.addSubview(watchListView)
+        watchListView.tableView.delegate = self
+        watchListView.tableView.dataSource = self
         
-        #warning("第一次使用")
-        let group = DispatchGroup()
-        
-        for symbol in symbols where watchlistMap[symbol] == nil {
-            group.enter()
-            
-            APICaller.shared.marketData(for: symbol) { [weak self] result in
-                defer {
-                    group.leave()
-                }
-                
-                switch result {
-                case .success(let data):
-                    let candleSticks = data.candleSticks
-                    self?.watchlistMap[symbol] = candleSticks
-                case .failure(let error):
-                    print(error)
-                }
-            }
-        }
-        
-        group.notify(queue: .main) {  [weak self] in
-            self?.createViewModels()
-            self?.tableView.reloadData()
+        watchListView.snp.makeConstraints { make in
+            make.edges.equalTo(view)
         }
     }
     
-    private func createViewModels() {
-        var viewModels = [WatchListTableViewCell.ViewModel]()
-        for (symbol, candleSticks) in watchlistMap {
-            let changePercentage = getChangePercentage(symbol: symbol, data: candleSticks)
-            viewModels.append(
-                .init(
-                    symbol: symbol,
-                    companyName: UserDefaults.standard.string(forKey: symbol) ?? "Company",
-                    price: getlatestClosingPrice(from: candleSticks),
-                    changeColor: changePercentage < 0 ? .systemRed: .systemGreen,
-                    changePercentage: .percentage(from: changePercentage),
-                    chartViewModel:.init(
-                        data: candleSticks.reversed().map { $0.close },
-                        showLegend: false,
-                        showAxis: false,
-                        fillColor: changePercentage < 0 ? .systemRed: .systemGreen
-                    )
-                )
-            )
+    private func setUpBinding() {
+        viewModel.reloadDataClosure = { [weak self] in
+            self?.watchListView.tableView.reloadData()
         }
-        
-        self.viewModels = viewModels
-    }
-    
-    #warning("之後改寫")
-    private func getChangePercentage(symbol: String ,data: [CandleStick]) -> Double {
-        let latestDate = data[0].date
-        guard let latestClose = data.first?.close,
-              let priorClose = data.first(where: {
-                  !Calendar.current.isDate($0.date, inSameDayAs: latestDate)
-              })?.close else {
-                  return 0
-              }
-        
-        #warning("會有浮點數誤差")
-        let diff = 1 - (priorClose/latestClose)
-//        print("\(symbol): Current: (\(latestDate): \(latestClose) | Prior: \(priorClose)")
-        print("\(symbol): \(diff)%")
-        return diff
-    }
-    
-    private func getlatestClosingPrice(from data: [CandleStick]) -> String {
-        guard let closingPrice = data.first?.close else { return "" }
-        
-        return "\(closingPrice)"
-    }
-    
-    private func setUpTableView() {
-        view.addSubviews(tableView)
-        tableView.delegate = self
-        tableView.dataSource = self
     }
     
     private func setUpFloatingPanel() {
@@ -148,13 +66,11 @@ class WatchListViewController: UIViewController {
         panel.set(contentViewController: vc)
         panel.addPanel(toParent: self)
         panel.delegate = self
-        #warning("不太確定")
         panel.track(scrollView: vc.newsView.tableView)
     }
     
     private func setUpTitleView() {
         let titleView = WatchListTitleView(frame: CGRect(x: 0, y: 0, width: view.width, height: navigationController?.navigationBar.height ?? 100))
-        
         navigationItem.titleView = titleView
     }
     
@@ -180,33 +96,9 @@ extension WatchListViewController: UISearchResultsUpdating {
               !query.trimmingCharacters(in: .whitespaces).isEmpty
         else { return }
         
-        // Cancel task
-        self.searchTask?.cancel()
-        
-        // Task encapsulates work
-        let task = DispatchWorkItem {
-            // Call API to search
-            APICaller.shared.search(query: query) { result in
-                
-                switch result {
-                case .success(let response):
-                    // Update results controller
-                    DispatchQueue.main.async {
-                        resultsVC.update(with: response.result)
-                    }
-                    
-                case .failure(let error):
-                    DispatchQueue.main.async {
-                        resultsVC.update(with: [])
-                    }
-                    print(error)
-                }
-            }
+        viewModel.searchStocks(query: query) { result in
+            resultsVC.update(with: result)
         }
-        
-        searchTask = task
-        #warning("第一次使用")
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3, execute: task)
     }
 }
 
@@ -245,22 +137,23 @@ extension WatchListViewController: FloatingPanelControllerDelegate {
 extension WatchListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModels.count
+        viewModel.numberOfCells
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(for: indexPath, cellType: WatchListTableViewCell.self)
-        cell.configure(with: viewModels[indexPath.row])
+        let cellViewModel = viewModel.getCellViewModel(at: indexPath)
+        cell.configure(with: cellViewModel)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         //Open detail from selection
-        let viewModel = viewModels[indexPath.row]
-        let vc = StockDetailsViewController(symbol: viewModel.symbol,
-                                            companyName: viewModel.companyName,
-                                            candleStickData: watchlistMap[viewModel.symbol] ?? []
+        let cellViewModel = viewModel.getCellViewModel(at: indexPath)
+        let vc = StockDetailsViewController(symbol: cellViewModel.symbol,
+                                            companyName: cellViewModel.companyName,
+                                            candleStickData: viewModel.watchlistMap[cellViewModel.symbol] ?? []
         )
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true)
@@ -284,10 +177,10 @@ extension WatchListViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.beginUpdates()
         
         // Update persistence
-        PersistenceManager.shared.removeFromWatchlist(symbol: viewModels[indexPath.row].symbol)
+        PersistenceManager.shared.removeFromWatchlist(symbol: viewModel.getCellViewModel(at: indexPath).symbol)
         
         // Update viewModels
-        viewModels.remove(at: indexPath.row)
+        viewModel.cellViewModels.value.remove(at: indexPath.row)
         
         // Deleta Row
         tableView.deleteRows(at: [indexPath], with: .automatic)

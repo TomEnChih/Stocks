@@ -35,7 +35,7 @@ struct MarketDataResponse: Codable {
                                 close: close[index])
             )
         }
-        let sortedData = result.sorted { $0.date > $1.date }
+        let sortedData = result.sorted { $0.date > $1.date }    //第一項為最近的時間
         return sortedData
     }
 }
