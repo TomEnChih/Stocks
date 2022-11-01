@@ -40,7 +40,7 @@ class WatchListViewModel {
         for symbol in symbols where watchlistMap[symbol] == nil {
             group.enter()
             
-            APICaller.shared.marketData(for: symbol) { [weak self] result in
+            NetworkManager.shared.marketData(for: symbol) { [weak self] result in
                 defer {
                     group.leave()
                 }
@@ -68,7 +68,7 @@ class WatchListViewModel {
         // Task encapsulates work
         let task = DispatchWorkItem {
             // Call API to search
-            APICaller.shared.search(query: query) { result in
+            NetworkManager.shared.search(query: query) { result in
                 
                 switch result {
                 case .success(let response):

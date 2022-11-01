@@ -27,6 +27,16 @@
 		B13EB5BD2903D39400E404C5 /* UICollectionView+Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B13EB5BC2903D39400E404C5 /* UICollectionView+Reusable.swift */; };
 		B13EB5BF2903D87A00E404C5 /* StockDetailsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B13EB5BE2903D87A00E404C5 /* StockDetailsHeaderView.swift */; };
 		B13EB5C22903F3EF00E404C5 /* MetricCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B13EB5C12903F3EF00E404C5 /* MetricCell.swift */; };
+		B15E780C29102ECC008F6B21 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15E780B29102ECC008F6B21 /* ParameterEncoding.swift */; };
+		B15E780E29102F30008F6B21 /* URLParameterEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15E780D29102F30008F6B21 /* URLParameterEncoder.swift */; };
+		B15E781029102FBE008F6B21 /* JSONParameterEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15E780F29102FBE008F6B21 /* JSONParameterEncoder.swift */; };
+		B15E781229102FD2008F6B21 /* EndPointType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15E781129102FD2008F6B21 /* EndPointType.swift */; };
+		B15E781429102FE7008F6B21 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15E781329102FE7008F6B21 /* HTTPMethod.swift */; };
+		B15E781629102FF8008F6B21 /* HTTPTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15E781529102FF8008F6B21 /* HTTPTask.swift */; };
+		B15E781829103007008F6B21 /* NetworkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15E781729103007008F6B21 /* NetworkRouter.swift */; };
+		B15E781A2910301F008F6B21 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15E78192910301F008F6B21 /* Router.swift */; };
+		B15E781C29103441008F6B21 /* StockEndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15E781B29103441008F6B21 /* StockEndPoint.swift */; };
+		B15E781E2910C864008F6B21 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15E781D2910C864008F6B21 /* NetworkManager.swift */; };
 		D930F45F28B112D8009D5216 /* Declarative.swift in Sources */ = {isa = PBXBuildFile; fileRef = D930F45E28B112D8009D5216 /* Declarative.swift */; };
 		D930F46128B11F37009D5216 /* String+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D930F46028B11F37009D5216 /* String+Additions.swift */; };
 		D930F46428B1216C009D5216 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D930F46328B1216C009D5216 /* CustomImageView.swift */; };
@@ -100,6 +110,16 @@
 		B13EB5BC2903D39400E404C5 /* UICollectionView+Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Reusable.swift"; sourceTree = "<group>"; };
 		B13EB5BE2903D87A00E404C5 /* StockDetailsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDetailsHeaderView.swift; sourceTree = "<group>"; };
 		B13EB5C12903F3EF00E404C5 /* MetricCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricCell.swift; sourceTree = "<group>"; };
+		B15E780B29102ECC008F6B21 /* ParameterEncoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterEncoding.swift; sourceTree = "<group>"; };
+		B15E780D29102F30008F6B21 /* URLParameterEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLParameterEncoder.swift; sourceTree = "<group>"; };
+		B15E780F29102FBE008F6B21 /* JSONParameterEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONParameterEncoder.swift; sourceTree = "<group>"; };
+		B15E781129102FD2008F6B21 /* EndPointType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPointType.swift; sourceTree = "<group>"; };
+		B15E781329102FE7008F6B21 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
+		B15E781529102FF8008F6B21 /* HTTPTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPTask.swift; sourceTree = "<group>"; };
+		B15E781729103007008F6B21 /* NetworkRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRouter.swift; sourceTree = "<group>"; };
+		B15E78192910301F008F6B21 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		B15E781B29103441008F6B21 /* StockEndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockEndPoint.swift; sourceTree = "<group>"; };
+		B15E781D2910C864008F6B21 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		CB3826FEA2FA64FE65DE8F3F /* Pods-StocksTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StocksTests.release.xcconfig"; path = "Target Support Files/Pods-StocksTests/Pods-StocksTests.release.xcconfig"; sourceTree = "<group>"; };
 		D619A20717424366C71C2E36 /* Pods-StocksTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-StocksTests.debug.xcconfig"; path = "Target Support Files/Pods-StocksTests/Pods-StocksTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D930F45E28B112D8009D5216 /* Declarative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Declarative.swift; sourceTree = "<group>"; };
@@ -235,6 +255,55 @@
 			path = Reusable;
 			sourceTree = "<group>";
 		};
+		B15E780629102E71008F6B21 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				B15E780A29102EA0008F6B21 /* EndPoint */,
+				B15E780929102E92008F6B21 /* Manager */,
+				B15E780829102E8B008F6B21 /* Service */,
+				B15E780729102E7F008F6B21 /* Encoding */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		B15E780729102E7F008F6B21 /* Encoding */ = {
+			isa = PBXGroup;
+			children = (
+				B15E780B29102ECC008F6B21 /* ParameterEncoding.swift */,
+				B15E780D29102F30008F6B21 /* URLParameterEncoder.swift */,
+				B15E780F29102FBE008F6B21 /* JSONParameterEncoder.swift */,
+			);
+			path = Encoding;
+			sourceTree = "<group>";
+		};
+		B15E780829102E8B008F6B21 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				B15E781129102FD2008F6B21 /* EndPointType.swift */,
+				B15E781329102FE7008F6B21 /* HTTPMethod.swift */,
+				B15E781529102FF8008F6B21 /* HTTPTask.swift */,
+				B15E781729103007008F6B21 /* NetworkRouter.swift */,
+				B15E78192910301F008F6B21 /* Router.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		B15E780929102E92008F6B21 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				B15E781D2910C864008F6B21 /* NetworkManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		B15E780A29102EA0008F6B21 /* EndPoint */ = {
+			isa = PBXGroup;
+			children = (
+				B15E781B29103441008F6B21 /* StockEndPoint.swift */,
+			);
+			path = EndPoint;
+			sourceTree = "<group>";
+		};
 		D930F46228B12135009D5216 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -341,6 +410,7 @@
 		D996BBC3289F7F0A003FDFC4 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				B15E780629102E71008F6B21 /* Networking */,
 				D996BBC4289F7F25003FDFC4 /* APICaller.swift */,
 				D996BBC6289F7F40003FDFC4 /* PersistenceManager.swift */,
 				D996BBC8289F7F52003FDFC4 /* HapticsManager.swift */,
@@ -716,9 +786,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B15E780C29102ECC008F6B21 /* ParameterEncoding.swift in Sources */,
 				B13EB5B72903D30400E404C5 /* Reusable.swift in Sources */,
 				D930F45F28B112D8009D5216 /* Declarative.swift in Sources */,
 				D9423A2A28A5695300C9542B /* NewsHeaderView.swift in Sources */,
+				B15E781029102FBE008F6B21 /* JSONParameterEncoder.swift in Sources */,
+				B15E780E29102F30008F6B21 /* URLParameterEncoder.swift in Sources */,
 				B13EB55C28FFE4CD00E404C5 /* UIStackView+Additions.swift in Sources */,
 				B13EB5A42901B22400E404C5 /* NewsView.swift in Sources */,
 				B13EB5AA29028F6600E404C5 /* WatchListTitleView.swift in Sources */,
@@ -727,16 +800,20 @@
 				D996BBDF28A019E7003FDFC4 /* SearchResponse.swift in Sources */,
 				D9B3ED1128A77552003F84F9 /* Formatter+Additions.swift in Sources */,
 				D996BBC9289F7F52003FDFC4 /* HapticsManager.swift in Sources */,
+				B15E781629102FF8008F6B21 /* HTTPTask.swift in Sources */,
 				D996BBC7289F7F40003FDFC4 /* PersistenceManager.swift in Sources */,
 				B13EB5A62901B67000E404C5 /* Dynamic.swift in Sources */,
 				B13EB5BF2903D87A00E404C5 /* StockDetailsHeaderView.swift in Sources */,
 				B13EB5A22901B19200E404C5 /* NewsViewModel.swift in Sources */,
 				D992983928B92648005604B3 /* StockChartView.swift in Sources */,
 				B13EB5B12902A07F00E404C5 /* StockDetailsView.swift in Sources */,
+				B15E781429102FE7008F6B21 /* HTTPMethod.swift in Sources */,
 				D996BB93289ECA4A003FDFC4 /* AppDelegate.swift in Sources */,
 				B1353814290BD21200F0D28F /* WatchListViewModel.swift in Sources */,
 				D930F46428B1216C009D5216 /* CustomImageView.swift in Sources */,
+				B15E781C29103441008F6B21 /* StockEndPoint.swift in Sources */,
 				D996BBE528A18A46003FDFC4 /* StockDetailsViewController.swift in Sources */,
+				B15E781E2910C864008F6B21 /* NetworkManager.swift in Sources */,
 				D9B3ED0F28A7699C003F84F9 /* NewsStory.swift in Sources */,
 				B13538122906968700F0D28F /* StockDetailsViewModel.swift in Sources */,
 				B13EB5B92903D33100E404C5 /* UITableView+Reusable.swift in Sources */,
@@ -749,8 +826,11 @@
 				B13EB5C22903F3EF00E404C5 /* MetricCell.swift in Sources */,
 				D996BBDC289FC23E003FDFC4 /* APIKeys.swift in Sources */,
 				B13EB5B42903C71A00E404C5 /* FinancialMetricsResponse.swift in Sources */,
+				B15E781A2910301F008F6B21 /* Router.swift in Sources */,
 				B13EB5A829026FE500E404C5 /* UIColor+Additions.swift in Sources */,
 				D996BB95289ECA4A003FDFC4 /* SceneDelegate.swift in Sources */,
+				B15E781229102FD2008F6B21 /* EndPointType.swift in Sources */,
+				B15E781829103007008F6B21 /* NetworkRouter.swift in Sources */,
 				D996BBD0289FAA14003FDFC4 /* SearchResultsViewController.swift in Sources */,
 				B13EB55E290002E400E404C5 /* Notification.swift in Sources */,
 				D992983528B924C4005604B3 /* WatchListTableViewCell.swift in Sources */,

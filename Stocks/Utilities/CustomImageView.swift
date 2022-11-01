@@ -56,7 +56,7 @@ class CustomImageView: UIImageView {
     // MARK: - Private
     
     private func setUpView() {
-        backgroundColor = .tertiarySystemBackground
+        backgroundColor = .secondarySystemBackground
         clipsToBounds = true
         contentMode = .scaleAspectFill
         layer.cornerRadius = 6

@@ -92,6 +92,7 @@ class WatchListTableViewCell: UITableViewCell, Reusable {
         leadingStackView.snp.makeConstraints { make in
             make.centerY.equalTo(contentView)
             make.left.equalTo(contentView.left).offset(10)
+            make.right.equalTo(miniChartView.snp.left).offset(5)
         }
         
         let width = 70

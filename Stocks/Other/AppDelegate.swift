@@ -14,16 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-//        APICaller.shared.search(query: "Apple") { result in
-//            switch result {
-//            case .success(let response):
-//                print(response)
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-//
-        debug()
+//        debug()
         
         return true
     }
@@ -43,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func debug() {
-        APICaller.shared.marketData(for: "AAPL", numberOfDays: 1) { result in
+        NetworkManager.shared.marketData(for: "AAPL", numberOfDays: 1) { result in
             print(result)
         }
     }

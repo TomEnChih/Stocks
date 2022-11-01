@@ -7,6 +7,9 @@
 
 import Foundation
 
+/*
+ 舊的API(已棄用)
+ */
 final class APICaller {
     
     static let shared = APICaller()

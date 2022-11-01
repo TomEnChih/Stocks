@@ -75,7 +75,8 @@ class StockDetailsViewModel {
         // Fetch candle sticks if needed
         if candleStickData.isEmpty {
             group.enter()
-            APICaller.shared.marketData(for: symbol) { [weak self] result in
+            
+            NetworkManager.shared.marketData(for: symbol) { [weak self] result in
                 defer {
                     group.leave()
                 }
@@ -92,7 +93,7 @@ class StockDetailsViewModel {
         // Fetch financial metrics
         group.enter()
         
-        APICaller.shared.financialMetrics(for: symbol) { [weak self] result in
+        NetworkManager.shared.financialMetrics(for: symbol) { [weak self] result in
             
             defer {
                 group.leave()
@@ -134,7 +135,8 @@ class StockDetailsViewModel {
     }
     
     private func fetchNews() {
-        APICaller.shared.news(for: .company(symbol: symbol)) { [weak self] result in
+        
+        NetworkManager.shared.news(for: .company(symbol: symbol)) { [weak self] result in
             switch result {
             case .success(let stories):
                 DispatchQueue.main.async {
